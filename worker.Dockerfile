@@ -11,10 +11,10 @@ COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
 
 # Bundle app source
-COPY . .
-
-# Make port 3000 available to the world outside this container
-EXPOSE 3000
+COPY models ./models
+COPY workers ./workers
+COPY config ./config
+COPY queue ./queue
 
 # Define the command to run the app
-CMD [ "node", "index.js" ]
+CMD [ "node", "workers/assesmentWorker.js" ]

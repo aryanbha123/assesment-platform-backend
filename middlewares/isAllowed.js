@@ -1,9 +1,10 @@
 export const isAllowed = (req, res, next) => {
-    const reqUserId = req.body._id;
-    const userId = req.user._id;
+    const reqUserId = req.params.userId;
+    const userId = req.user._id.toString();
+
     if (userId === reqUserId) {
         next();
     } else {
-        res.status(401).json({ message: "Unauthorized" });
+        res.status(403).json({ message: "Forbidden" });
     }
 };

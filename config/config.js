@@ -41,5 +41,3 @@ export const redisConnection = {
     password: process.env.REDIS_PASSWORD,
     // db: process.env.NODE_ENV == 'DEV' ? 0 : 1
 };
-
-export const ASSESSMENT_QUEUE = 'assessmentQueue';
