@@ -116,10 +116,9 @@ app.use(generalRateLimiter);
 // =================================================================
 
 // A simple endpoint to check if the service is running.
-app.get("/health", (req, res) => {
+app.get('/api/v1/health', (req, res) => {
   res.json({ message: "OK" });
 });
-
 
 // =================================================================
 //                      GLOBAL ERROR HANDLER
