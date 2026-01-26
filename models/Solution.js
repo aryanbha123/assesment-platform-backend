@@ -15,7 +15,7 @@ const SectionResponseSchema = new Schema({
 
 const AssesmentSolutionSchema = new Schema({
   userId : {type: mongoose.Schema.ObjectId , ref : 'Users'}, 
-  assesmentId : {type:mongoose.Schema.ObjectId, ref: 'Assesment'},
+  assessmentId : {type:mongoose.Schema.ObjectId, ref: 'Assesment'},
   currSection : {type : Number , default: 0},
   ufmAttempts: {type : Number, default: 0},
   assesmentSnapshot: {type:[mongoose.Schema.Types.Mixed] , default:[]},

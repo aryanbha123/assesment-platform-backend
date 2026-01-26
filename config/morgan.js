@@ -52,7 +52,7 @@ export const setupMorgan = (app) => {
 
   /* ---------- Attach middleware ---------- */
 
-  if (process.env.NODE_ENV === "PROD") {
+  if (process.env.NODE_ENV !== "PROD") {
     // Only log errors in prod
     app.use(
       morgan(format, {

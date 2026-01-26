@@ -1,5 +1,6 @@
 import { Schema, model } from "mongoose";
-import { QuestionSchema } from "../test/QuestionSchema.js";
+import { QuestionSchema } from "./QuestionSchema.js";
+import Problem from "./Problem.js"; // Import the Problem model
 
 const QuestionPoolSchema = new Schema(
   {
@@ -7,6 +8,11 @@ const QuestionPoolSchema = new Schema(
     questions: {
       type: [QuestionSchema],
       default: [],
+    },
+    problem: { // Add the problem field
+      type: Schema.Types.ObjectId,
+      ref: 'Problem', // Reference the Problem model
+      required: false // Problem is optional
     },
 
     /* More Fields Can be added later */

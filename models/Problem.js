@@ -14,10 +14,6 @@ const ProblemSchema = new mongoose.Schema(
     description: {
       type: String,
     },
-    descriptionMarkdown: {
-      type: Boolean,
-      default: true,
-    },
     constraints: {
       type: [String],
       default: [],

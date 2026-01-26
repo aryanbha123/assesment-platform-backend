@@ -1,8 +1,9 @@
 import { Router } from "express";
 import { addJobToMainQueue } from "../services/queueService.js";
+import { QuestionPool } from "../models/QuestionPool.js";
+import Problem from "../models/Problem.js";
 
 const testRouter = Router();
-
 /**
  * @route   POST /api/v1/test/add-job
  * @desc    Adds a test job to the mainQueue
