@@ -44,14 +44,7 @@ export const getUserAssesments = async (req, res) => {
     }
 };
 
-export const submitSection = async (req, res) => {
-    try {
-        // Logic to submit a section
-        res.json({ message: 'Section submitted' });
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-};
+
 
 export const submitAssesment = async (req, res) => {
     try {

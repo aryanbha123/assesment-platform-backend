@@ -10,7 +10,10 @@ export const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS || "http://localhost:
 
 export const corsConfig = {
     origin:ALLOWED_ORIGINS,
-    allowedHeaders: ["Content-Type", "Authorization"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    // allow headers
+
+    allowedHeaders: ["Content-Type", "Authorization", "x-auth-user", "x-auth-token"],
     credentials: true,
 };
 

@@ -14,7 +14,6 @@ const QuestionPoolSchema = new Schema(
       ref: 'Problem', // Reference the Problem model
       required: false // Problem is optional
     },
-
     /* More Fields Can be added later */
   },
   { timestamps: true },

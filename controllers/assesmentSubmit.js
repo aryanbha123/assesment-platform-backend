@@ -1,28 +1,71 @@
+import AssesmentSolution from "../models/Solution.js";
+import { addJobToMainQueue } from "../services/queueService.js";
+
 export const submitSection = async (req, res) => {
   try {
-    const {submissionId, sectionId,sectionType, response  ,current , autoSubmit} = req.body;
+    const {
+      solutionId,
+      sectionId,
+      sectionType,
+      response,
+      current,
+      autoSubmit, /// help us to directly submit whole of the quiz
+    } = req.body;
 
-    const userSolution = await ExamSolution.findById(submissionId);
+    if (!solutionId) {
+      return res.json({ message: "Missing solution id" });
+    }
+    if (!sectionId) {
+      return res.json({ message: "Missing section id" });
+    }
+    if (!sectionType) {
+      return res.json({ message: "Missing section type" });
+    }
+    if (!response) {
+      return res.json({ message: "Missing response" });
+    }
+    if (current === undefined || current === null) {
+      return res.json({ message: "Missing current" });
+    }
+    const userSolution = await AssesmentSolution.findById(solutionId);
+    if (!userSolution) {
+      return res.json({ message: "Solution not found" });
+    }
 
-    if(userSolution.testSnapshot.length == current + 1) {
+   
+    if (!userSolution.response.find((res) => res.sectionId.toString() === sectionId)) {
+      return res.json({ message: "Section not found" , sectionId});
+    }
+    if (sectionType == "quiz") {
+      userSolution.response.find(
+        (res) => res.sectionId.toString() === sectionId,
+      ).quizAnswers = response;
+    }
+    if (sectionType == "coding") {
+      userSolution.response.find(
+        (res) => res.sectionId.toString() === sectionId,
+      ).codingAnswers = response;
+    }
+
+    if (userSolution.assesmentSnapshot.length - 1 == current) {
       userSolution.isSubmitted = true;
     }
     userSolution.currSection = current + 1;
-    // if(sectionType == 'quiz') {
-
-      //webhook call
-    // }else{
-      //webhook call
-    // }
-    // if(autoSubmit) userSolution.isSubmitted = true;
     await userSolution.save();
-    
-    await axios.post(`${EVALUATOR_API}/weebhooks/exam/eval/test` , {data:{
-      submissionId, sectionId,sectionType, response  ,current
-    }} );
-    return res.json({message:"Section Submitted ", nextSection:userSolution.isSubmitted?-1:current+1, submitted:userSolution.isSubmitted})
+    await addJobToMainQueue("submitSection", {
+      solutionId,
+      sectionId,
+      sectionType,
+      response,
+      current,
+    });
+    return res.json({
+      message: "Section Submitted ",
+      nextSection: userSolution.isSubmitted ? -1 : current + 1,
+      submitted: userSolution.isSubmitted,
+    });
   } catch (error) {
-    console.log(error)
-    return res.json({message:"Internal Server Error"})
+    console.log(error);
+    return res.json({ message: "Internal Server Error" });
   }
-}
+};
