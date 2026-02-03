@@ -2,7 +2,8 @@ import { Router } from "express";
 import { 
     markUfm,
     getUserAssesments,
-    submitAssesment
+    submitAssesment,
+    getSolutionById
 } from "../controllers/assesmentController.js";
 import { isAuthenticated } from "../middlewares/isAuthenticated.js";
 import { isAllowed } from "../middlewares/isAllowed.js";
@@ -20,4 +21,8 @@ assesmentRouter.get('/users/assesments/:userId', isAuthenticated, isAllowed, get
 assesmentRouter.post('/submit-assesment', isAuthenticated, submitAssesment);
 assesmentRouter.get('/server-sync', isAuthenticated, isAllowed, getServerSync);
 assesmentRouter.put('/submit-section', isAuthenticated, submitSection);
+
+
+
+assesmentRouter.get('/solution/:solutionId', isAuthenticated, getSolutionById);
 export default assesmentRouter;

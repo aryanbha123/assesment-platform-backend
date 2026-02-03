@@ -1,6 +1,5 @@
 import { Schema, model } from "mongoose";
 import { QuestionSchema } from "./QuestionSchema.js";
-import Problem from "./Problem.js"; // Import the Problem model
 
 const QuestionPoolSchema = new Schema(
   {

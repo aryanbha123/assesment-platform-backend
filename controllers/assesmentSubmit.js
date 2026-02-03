@@ -1,6 +1,6 @@
 import AssesmentSolution from "../models/Solution.js";
 import { addJobToMainQueue } from "../services/queueService.js";
-
+import axios from 'axios'
 export const submitSection = async (req, res) => {
   try {
     const {
@@ -32,25 +32,28 @@ export const submitSection = async (req, res) => {
       return res.json({ message: "Solution not found" });
     }
 
-   
+
     if (!userSolution.response.find((res) => res.sectionId.toString() === sectionId)) {
-      return res.json({ message: "Section not found" , sectionId});
+      return res.json({ message: "Section not found", sectionId });
     }
     if (sectionType == "quiz") {
       userSolution.response.find(
         (res) => res.sectionId.toString() === sectionId,
       ).quizAnswers = response;
     }
-    if (sectionType == "coding") {
-      userSolution.response.find(
-        (res) => res.sectionId.toString() === sectionId,
-      ).codingAnswers = response;
-    }
+    // if (sectionType == "coding") {
+    //   userSolution.response.find(
+    //     (res) => res.sectionId.toString() === sectionId,
+    //   ).codingAnswers = response;
+    // }
 
     if (userSolution.assesmentSnapshot.length - 1 == current) {
       userSolution.isSubmitted = true;
+    } else {
+      userSolution.response[current + 1].startedAt = new Date();
     }
-    userSolution.currSection = current + 1;
+    userSolution.currSection += 1;
+
     await userSolution.save();
     await addJobToMainQueue("submitSection", {
       solutionId,

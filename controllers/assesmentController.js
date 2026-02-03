@@ -2,7 +2,7 @@ import Assesment from '../models/Assesment.js';
 import AssesmentSolution from '../models/Solution.js';
 import { assesmentQueue } from '../queue/mainQueue.js';
 import { ASSESMENT_JOB } from '../constants/constants.js';
-
+import express from 'express'
 export const getSolution = async (req, res) => {
     try {
         const { testId, userId } = req.params;
@@ -56,3 +56,16 @@ export const submitAssesment = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+export const getSolutionById = async (req, res) => {
+    const { solutionId } = req.params;
+
+    if (!solutionId) return res.json({ message: "Failed to fetch", success: false, error: "Solution Id not provided" }).status(400);
+    try {
+        const data = await AssesmentSolution.findById(solutionId);
+        return res.json({data, message:"Fetched Successfully"});
+    } catch (e) {
+        console.log(e)
+        res.json({ message: "internal server error", success: false, error: e }).status(500);
+    }
+}

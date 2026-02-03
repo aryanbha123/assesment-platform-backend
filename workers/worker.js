@@ -1,10 +1,12 @@
 import { Worker } from 'bullmq';
-import { redisConnection } from '../config/config.js';
+import { db, redisConnection } from '../config/config.js';
 import { ASSESMENT_QUEUE } from '../constants/constants.js';
-
+import { examEvaluator } from './evaluator.js';
+db();
 const processJob = async (job) => {
   console.log(`Processing job ${job.id} of type ${job.name}`);
   console.log('Job data:', job.data);
+  examEvaluator(job);
   // Add your job processing logic here
   return 'done';
 };
