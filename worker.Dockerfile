@@ -15,6 +15,7 @@ COPY models ./models
 COPY workers ./workers
 COPY config ./config
 COPY queue ./queue
+COPY constants ./constants
 
 # Define the command to run the app
 CMD [ "node", "workers/worker.js" ]
