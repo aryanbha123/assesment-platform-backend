@@ -17,4 +17,4 @@ COPY config ./config
 COPY queue ./queue
 
 # Define the command to run the app
-CMD [ "node", "workers/assesmentWorker.js" ]
+CMD [ "node", "workers/worker.js" ]
