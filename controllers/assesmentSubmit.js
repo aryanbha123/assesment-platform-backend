@@ -12,6 +12,7 @@ export const submitSection = async (req, res) => {
       autoSubmit, /// help us to directly submit whole of the quiz
     } = req.body;
 
+    console.log(response);
     if (!solutionId) {
       return res.json({ message: "Missing solution id" });
     }

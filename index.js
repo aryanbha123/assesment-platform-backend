@@ -104,17 +104,12 @@ import testRouter from './routes/testRouter.js';
 import codeExecutionRouter from "./routes/codeExecutionRoutes.js";
 import userRouter from "./routes/userRouter.js";
 app.use('/api/v1/test', testRouter);
-
-
-
 // =================================================================
 //                      RATE LIMITER
 // =================================================================
 
 // Apply a general rate limiter to all requests to prevent abuse.
 app.use(generalRateLimiter);
-
-
 // =================================================================
 //                      HEALTH CHECK
 // =================================================================

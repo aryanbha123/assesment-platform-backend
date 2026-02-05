@@ -11,18 +11,13 @@ import { getUserAssessmentSolution } from "../controllers/assesmentCreateSolutio
 import { getServerSync } from "../controllers/helpers.js";
 import startAssessment from "../controllers/assessmentStart.js";
 import { submitSection } from "../controllers/assesmentSubmit.js";
-
 const assesmentRouter = Router();
-
 assesmentRouter.post('/solution', isAuthenticated, isAllowed, getUserAssessmentSolution);
 assesmentRouter.post('/start-assesment', isAuthenticated, startAssessment);
-assesmentRouter.post('/mark-ufm', isAuthenticated, markUfm); // Consider who can mark UFM
+assesmentRouter.post('/mark-ufm', isAuthenticated, markUfm);
 assesmentRouter.get('/users/assesments/:userId', isAuthenticated, isAllowed, getUserAssesments);
 assesmentRouter.post('/submit-assesment', isAuthenticated, submitAssesment);
 assesmentRouter.get('/server-sync', isAuthenticated, isAllowed, getServerSync);
 assesmentRouter.put('/submit-section', isAuthenticated, submitSection);
-
-
-
 assesmentRouter.get('/solution/:solutionId', isAuthenticated, getSolutionById);
 export default assesmentRouter;

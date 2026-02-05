@@ -45,20 +45,21 @@ const evaluateQuizSection = (sectionWithSolution, response) => {
 /**
  * Evaluate coding section
  */
-const evaluateCodingSection = async (submission, sectionId) => {
+const evaluateCodingSection = async (submission, sectionId , response) => {
     try {
         // Find the section in the response array
-        const section = submission.response.find(
+        var section = submission.response.find(
             r => r.sectionId.toString() === sectionId.toString()
         );
-
+        console.log(section);
+        console.log(response);
+        if(!Array.isArray(section.codingAnswers).length > 0) section.codingAnswers.push(response);
         if (!section || !section.codingAnswers || !section.codingAnswers[0]) {
             throw new Error("Coding answers not found for section");
         }
 
         // Create a deep copy to avoid mutation issues
         const sectionResponse = JSON.parse(JSON.stringify(section.codingAnswers[0]));
-        console.log("Section Response before evaluation:", sectionResponse);
 
         // Process each question in the coding answers
         await Promise.all(
@@ -113,7 +114,7 @@ export const examEvaluator = async (job) => {
     try {
         const { solutionId, sectionId, sectionType, response, current } = job.data;
 
-        console.log("Job data:", { solutionId, sectionId, sectionType, current });
+        console.log("Evaluation Starts")
 
         // Validate required fields
         if (!solutionId || !sectionId || !sectionType) {
@@ -147,7 +148,7 @@ export const examEvaluator = async (job) => {
             console.log(`Quiz evaluation: ${correctAnswers}/${totalQuestions} correct`);
         } else if (sectionType === 'coding') {
             // Evaluate the existing coding answers in the submission
-            evaluatedResponse = await evaluateCodingSection(submission, sectionId);
+            evaluatedResponse = await evaluateCodingSection(submission, sectionId, response);
             console.log(`Coding evaluation completed for section ${sectionId}`);
         }
 
