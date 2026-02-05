@@ -95,12 +95,14 @@ app.use(express.json());
 // Mount the assessment router for all routes starting with /api/v1/assesments.
 app.use('/api/v1/assesments', assesmentRouter);
 app.use('/api/v1/code-execution', codeExecutionRouter);
+app.use('/api/user',userRouter);
 // Example of another router that could be added:
 // app.use('/api/v1/auth', authRouter);
 
 // Mount the test router for testing purposes.
 import testRouter from './routes/testRouter.js';
 import codeExecutionRouter from "./routes/codeExecutionRoutes.js";
+import userRouter from "./routes/userRouter.js";
 app.use('/api/v1/test', testRouter);
 
 

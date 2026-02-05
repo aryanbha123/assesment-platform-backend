@@ -21,9 +21,6 @@ export const submitSection = async (req, res) => {
     if (!sectionType) {
       return res.json({ message: "Missing section type" });
     }
-    if (!response) {
-      return res.json({ message: "Missing response" });
-    }
     if (current === undefined || current === null) {
       return res.json({ message: "Missing current" });
     }
