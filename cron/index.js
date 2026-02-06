@@ -49,6 +49,7 @@ export const startEvaluatedUsersCron = () => {
         { _id: { $in: solutions.map((s) => s._id) } },
         { $set: { notified: true } },
       );
+      console.log("MARKED ALL NOTIFUED")
     } catch (error) {
       console.error("Cron job error:", error);
     }

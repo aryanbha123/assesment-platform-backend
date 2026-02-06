@@ -24,7 +24,8 @@ const AssesmentSolutionSchema = new Schema({
   isSubmitted: {type:Boolean, default:false},
   userDetails:[mongoose.Schema.Types.Mixed],
   isEvaluated: {type:Boolean , default:false},
-  feedback:[mongoose.Schema.Types.Mixed]
+  feedback:[mongoose.Schema.Types.Mixed],
+  notified: {type:Boolean,default:false}
 },
 {
   timestamps:true
