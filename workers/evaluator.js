@@ -51,8 +51,6 @@ const evaluateCodingSection = async (submission, sectionId , response) => {
         var section = submission.response.find(
             r => r.sectionId.toString() === sectionId.toString()
         );
-        console.log(section);
-        console.log(response);
         if(!Array.isArray(section.codingAnswers).length > 0) section.codingAnswers.push(response);
         if (!section || !section.codingAnswers || !section.codingAnswers[0]) {
             throw new Error("Coding answers not found for section");

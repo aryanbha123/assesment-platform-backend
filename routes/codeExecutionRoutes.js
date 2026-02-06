@@ -34,6 +34,28 @@ export const headers = {
   "X-Auth-Token": "yourAuthTokenHere",
 };
 
+const createTokenKey = async (problemId, tokens, testCases) => {
+  const redisKey = `submission:${problemId}`;
+  const tokenMap = {};
+
+  tokens.forEach((t, index) => {
+    tokenMap[t.token] = {
+      stdin: testCases[index].input,
+      expectedOutput: testCases[index].output.trim(),
+      index
+    };
+  });
+
+  await redis.set(
+    redisKey,
+    JSON.stringify(tokenMap),
+    "EX",
+    60 * 30 // 30 minutes TTL
+  );
+
+  return redisKey;
+};
+
 codeExecutionRouter.post("/eval", async (req, res) => {
   try {
     const { code, language, problemId } = req.body;
@@ -73,6 +95,7 @@ codeExecutionRouter.post("/eval", async (req, res) => {
     );
     // console.log("Submission response:", submitRes.data);
     const tokens = submitRes.data || [];
+    await createTokenKey(problemId, tokens, problem.testCases);
     res.json(tokens);
   } catch (e) {
     console.error(e.message);
@@ -83,7 +106,7 @@ codeExecutionRouter.post("/eval", async (req, res) => {
 
 codeExecutionRouter.post("/submit", async (req, res) => {
   try {
-    const { code, language, problemId, sectionId, solutionId } = req.body;
+    const { code, language, problemId, sectionId  , solutionId} = req.body;
     const cacheKey = `problem:${problemId}`;
 
     if (!code || !language || !problemId) {
@@ -118,7 +141,7 @@ codeExecutionRouter.post("/submit", async (req, res) => {
       { headers },
     );
     const tokens = submitRes.data || [];
-
+    await createTokenKey(problemId, tokens, problem.testCases);
     // FIX: Added null checks
     const solution = await AssesmentSolution.findById(solutionId);
     if (!solution) {
@@ -157,6 +180,7 @@ codeExecutionRouter.post("/submit", async (req, res) => {
       };
     }
 
+
     // FIX: Added await
     await solution.save();
     res.json(tokens);
@@ -173,19 +197,27 @@ codeExecutionRouter.post("/submit", async (req, res) => {
 
 codeExecutionRouter.post("/fetch", async (req, res) => {
   try {
-    const { tokenStrings } = req.body;
-    const data = await axios.get(
+    const { tokenStrings, problemId } = req.body;
+
+    const { data } = await axios.get(
       `${CODE_EXECUTION_API}/submissions/batch?tokens=${tokenStrings.join(",")}&base64_encoded=true`,
-      {
-        headers,
-      },
+      { headers }
     );
-    res.json(data.data);
+
+    const redisKey = `submission:${problemId}`;
+    const tokenMap = JSON.parse(await redis.get(redisKey) || "{}");
+    const enriched = data.submissions.map((sub) => ({
+      ...sub,
+      stdin: encodeBase64(tokenMap[sub.token]?.stdin) ?? null,
+    }));
+
+    res.json({ submissions: enriched });
   } catch (e) {
     console.log(e);
-    res.status(400).json({ message: "Error" });
+    res.status(400).json({ message: "Error", error: e.message });
   }
 });
+
 
 // codeExecutionRouter.post("/submit", async (req, res) => {
 //   try {
