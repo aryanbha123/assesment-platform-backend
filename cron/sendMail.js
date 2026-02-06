@@ -1,7 +1,7 @@
 import { configDotenv } from "dotenv";
 configDotenv();
 import sgMail from "@sendgrid/mail";
-import { assessmentThankYouTemplate } from "./mail";
+import { assessmentThankYouTemplate } from "./mail.js";
 const key = process.env.SENDGRID_KEY;
 
 // export const sendAssessmentThankYouMail = async ({
