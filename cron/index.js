@@ -1,7 +1,7 @@
 // index.ts or server.ts
-import { db } from "../../assesment-platform-backend/config/config.js";
-import AssesmentSolution from "../../assesment-platform-backend/models/Solution.js";
-import User from "../../assesment-platform-backend/models/User.js";
+import { db } from "../config/config.js";
+import AssesmentSolution from "../models/Solution.js";
+import User from "../models/User.js";
 import cron from "node-cron";
 import { sendAssessmentThankYouMail } from "./sendMail.js";
 
@@ -20,9 +20,7 @@ export const startEvaluatedUsersCron = () => {
       }
 
       // 2️⃣ Extract userIds
-      const userIds = solutions
-        .map((s) => s.userId)
-        .filter(Boolean);
+      const userIds = solutions.map((s) => s.userId).filter(Boolean);
 
       // 3️⃣ Fetch users using $in
       const users = await User.find({
@@ -30,9 +28,7 @@ export const startEvaluatedUsersCron = () => {
       }).select("name email");
 
       // 4️⃣ Create a fast lookup map
-      const userMap = new Map(
-        users.map((u) => [u._id.toString(), u]),
-      );
+      const userMap = new Map(users.map((u) => [u._id.toString(), u]));
 
       // 5️⃣ Send mails
       for (const solution of solutions) {
